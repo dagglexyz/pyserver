@@ -1,25 +1,17 @@
 from fastapi import FastAPI
-from pymongo import MongoClient
-from database.db import db, connection
+from fastapi.middleware.cors import CORSMiddleware
+
 
 # Routes
-from routes import user
+from routes import job
 
 app = FastAPI(debug=True)
+app.add_middleware(
+    CORSMiddleware, allow_origins="*", allow_methods="*", allow_headers="*"
+)
 
 
-@app.on_event("startup")
-def startup_db_client():
-    db.user.create_index([("address")], unique=True)
-
-
-@app.on_event("shutdown")
-def shutdown_db_client():
-    connection.close()
-    print("Closed MongoDB database!")
-
-
-app.include_router(user.router)
+app.include_router(job.router)
 
 
 @app.get("/")
