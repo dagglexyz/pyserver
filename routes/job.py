@@ -23,6 +23,11 @@ async def signin(request: Request, response: Response):
         body = await request.json()
         if "jobspecdocker" not in body or "storagespec" not in body:
             raise Exception("Please send valid body.")
+        inputs = []
+        for input in body["storagespec"]:
+            print(input)
+            inputs.append(StorageSpec(**input))
+
         data = dict(
             APIVersion="V1beta1",
             ClientID=get_client_id(),
@@ -30,7 +35,7 @@ async def signin(request: Request, response: Response):
                 engine="Docker",
                 verifier="Noop",
                 publisher_spec=PublisherSpec(type="Estuary"),
-                inputs=[StorageSpec(**body["storagespec"])],
+                inputs=inputs,
                 docker=JobSpecDocker(**body["jobspecdocker"]),
                 language=JobSpecLanguage(job_context=None),
                 wasm=None,
