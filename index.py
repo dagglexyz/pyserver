@@ -16,4 +16,4 @@ app.include_router(job.router)
 
 @app.get("/")
 def root():
-    return {"message": "Daggle flask server⚡"}
+    return {"message": "Daggle fastapi server⚡"}
